@@ -1,8 +1,10 @@
 
 import { Kafka } from 'kafkajs';
-import {Validator} from "../messaging/kafka/validator";
+import {Validator} from "../messaging/validator";
 import schema from "../specification/shipment-loss-event-schema.json"
-import {KafkaConfig} from "../appconfig/kafka-config";
+import {KafkaConfig} from "../appconfig/kafka-config"
+import {mapPayloadIntoShipmentLossEventModel} from "../utils"
+
 
 export class KafkaConsumerService {
     private kafka: Kafka
@@ -14,7 +16,6 @@ export class KafkaConsumerService {
     }
 
     public async runConsumer(){
-        console.log("connecting")
         await this.consumer.connect()
         await this.consumer.subscribe({topic: process.env.KAFKA_TOPIC_NAME_CONSUMER as string, fromBeginning: true})
         await this.consumer.run({
@@ -22,8 +23,9 @@ export class KafkaConsumerService {
                 if (message.value === null) {
                     return;
                 }
-                const payloadEvent = Validator.parseJson(message.value.toString())
+                const payloadEvent: object = Validator.parseJson(message.value.toString()) as object
                 Validator.validateShipmentLossEvent(payloadEvent, schema)
+                const shipmentLossEventObject = mapPayloadIntoShipmentLossEventModel(payloadEvent)
             }
         })
     }

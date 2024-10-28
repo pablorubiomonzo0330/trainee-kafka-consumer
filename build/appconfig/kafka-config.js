@@ -6,7 +6,9 @@ const kafkajs_1 = require("kafkajs");
 // const kafkaConfig: KafkaConfig = { brokers: [`${process.env.KAFKA_HOST_NAME}${process.env.KAFKA_PORT}`] }
 class KafkaConfig {
     constructor(KAFKA_BROKER_URL = `${process.env.KAFKA_HOST_NAME}${process.env.KAFKA_PORT}`) {
-        this.KAFKA_BROKER_URL = KAFKA_BROKER_URL;
+            this.KAFKA_BROKER_URL_1 = `${process.env.KAFKA_HOST_NAME}${process.env.KAFKA_PORT_1}`,
+            this.KAFKA_BROKER_URL_2 =`${process.env.KAFKA_HOST_NAME}${process.env.KAFKA_PORT_2}`,
+            this.KAFKA_BROKER_URL_3 =`${process.env.KAFKA_HOST_NAME}${process.env.KAFKA_PORT_3}`
     }
     getKafkaInstance() {
         if (this.kafkaInstance === undefined) {
@@ -17,8 +19,7 @@ class KafkaConfig {
     }
     getClientConfig() {
         return {
-            clientId: `trainee_kafkaproject`,
-            brokers: [this.KAFKA_BROKER_URL]
+            brokers: [this.KAFKA_BROKER_URL_1, this.KAFKA_BROKER_URL_2, this.KAFKA_BROKER_URL_3]
         };
     }
 }
