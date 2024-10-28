@@ -1,0 +1,7 @@
+kafka:
+  topic:
+    name: "my-topic"
+  username: "test"
+  password: "test1234"
+  bootstrap:
+    servers: "localhost:9092"
