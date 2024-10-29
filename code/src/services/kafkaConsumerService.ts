@@ -4,7 +4,7 @@ import {Validator} from "../messaging/validator";
 import schema from "../specification/shipment-loss-event-schema.json"
 import {KafkaConfig} from "../appconfig/kafka-config"
 import {mapPayloadIntoShipmentLossEventModel} from "../utils"
-
+import {logger} from "../utils";
 
 export class KafkaConsumerService {
     private kafka: Kafka
@@ -18,13 +18,15 @@ export class KafkaConsumerService {
     public async runConsumer(){
         await this.consumer.connect()
         await this.consumer.subscribe({topic: process.env.KAFKA_TOPIC_NAME_CONSUMER as string, fromBeginning: true})
+        console.log('subscribed to topic: ', process.env.KAFKA_TOPIC_NAME_CONSUMER as string)
         await this.consumer.run({
             eachMessage: async ({topic, partition, message}) => {
                 if (message.value === null) {
+                    logger.error(`The message value is empty - Date: ${new Date().toISOString()}`)
                     return;
                 }
                 const payloadEvent: object = Validator.parseJson(message.value.toString()) as object
-                Validator.validateShipmentLossEvent(payloadEvent, schema)
+                await Validator.validateShipmentLossEvent(payloadEvent, schema)
                 const shipmentLossEventObject = mapPayloadIntoShipmentLossEventModel(payloadEvent)
             }
         })

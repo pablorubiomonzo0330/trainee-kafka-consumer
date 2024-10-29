@@ -17,6 +17,7 @@ const validator_1 = require("../messaging/validator");
 const shipment_loss_event_schema_json_1 = __importDefault(require("../specification/shipment-loss-event-schema.json"));
 const kafka_config_1 = require("../appconfig/kafka-config");
 const utils_1 = require("../utils");
+const utils_2 = require("../utils");
 class KafkaConsumerService {
     constructor() {
         this.kafka = new kafka_config_1.KafkaConfig().getKafkaInstance();
@@ -26,13 +27,15 @@ class KafkaConsumerService {
         return __awaiter(this, void 0, void 0, function* () {
             yield this.consumer.connect();
             yield this.consumer.subscribe({ topic: process.env.KAFKA_TOPIC_NAME_CONSUMER, fromBeginning: true });
+            console.log('subscribed to topic: ', process.env.KAFKA_TOPIC_NAME_CONSUMER);
             yield this.consumer.run({
                 eachMessage: (_a) => __awaiter(this, [_a], void 0, function* ({ topic, partition, message }) {
                     if (message.value === null) {
+                        utils_2.logger.error(`The message value is empty - Date: ${new Date().toISOString()}`);
                         return;
                     }
                     const payloadEvent = validator_1.Validator.parseJson(message.value.toString());
-                    validator_1.Validator.validateShipmentLossEvent(payloadEvent, shipment_loss_event_schema_json_1.default);
+                    yield validator_1.Validator.validateShipmentLossEvent(payloadEvent, shipment_loss_event_schema_json_1.default);
                     const shipmentLossEventObject = (0, utils_1.mapPayloadIntoShipmentLossEventModel)(payloadEvent);
                 })
             });
