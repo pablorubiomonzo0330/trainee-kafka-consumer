@@ -34,3 +34,6 @@
 [2024-10-29T14:18:02.807] [ERROR] default - instance.occurredOn does not conform to the "date-time" format
 [2024-10-29T14:18:07.268] [ERROR] default - instance.occurredOn does not conform to the "date-time" format
 [2024-10-29T16:22:17.267] [ERROR] default - instance.partnerId does not match pattern "^[0-9]+$"
+[2024-10-30T09:11:47.626] [ERROR] default - instance.partnerId does not match pattern "^[0-9]+$"
+[2024-10-30T09:11:54.969] [ERROR] default - instance.partnerId does not match pattern "^[0-9]+$"
+[2024-10-30T09:12:24.352] [ERROR] default - instance.partnerId does not match pattern "^[0-9]+$"

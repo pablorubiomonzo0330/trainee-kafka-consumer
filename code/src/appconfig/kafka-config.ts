@@ -10,9 +10,9 @@ export class KafkaConfig{
     private kafkaInstance: Kafka | undefined
 
     constructor(
-        private KAFKA_BROKER_URL_1 = `${process.env.KAFKA_HOST_NAME}${process.env.KAFKA_PORT_1}`,
-        private KAFKA_BROKER_URL_2 =`${process.env.KAFKA_HOST_NAME}${process.env.KAFKA_PORT_2}`,
-        private KAFKA_BROKER_URL_3 =`${process.env.KAFKA_HOST_NAME}${process.env.KAFKA_PORT_3}`
+        private KAFKA_BROKER_URL_1 = `${process.env.KAFKA_HOST_NAME}1:${process.env.KAFKA_PORT_1}`,
+        private KAFKA_BROKER_URL_2 =`${process.env.KAFKA_HOST_NAME}2:${process.env.KAFKA_PORT_2}`,
+        private KAFKA_BROKER_URL_3 =`${process.env.KAFKA_HOST_NAME}3:${process.env.KAFKA_PORT_3}`
     ){}
 
     public getKafkaInstance(){

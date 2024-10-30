@@ -1,37 +1,16 @@
-# syntax=docker/dockerfile:1
+FROM node:20.17
 
-# Comments are provided throughout this file to help you get started.
-# If you need more help, visit the Dockerfile reference guide at
-# https://docs.docker.com/go/dockerfile-reference/
-
-# Want to help us make this template better? Share your feedback here: https://forms.gle/ybq9Krt8jtBL3iCk7
-
-ARG NODE_VERSION=20.17.0
-
-FROM node:${NODE_VERSION}-alpine
-
-# Use production node environment by default.
-ENV NODE_ENV production
 WORKDIR /code
 
-# Download dependencies as a separate step to take advantage of Docker's caching.
-# Leverage a cache mount to /root/.npm to speed up subsequent builds.
-# Leverage a bind mounts to package.json and package-lock.json to avoid having to copy them into
-# into this layer.
-RUN --mount=type=bind,source=package.json,target=package.json \
-    --mount=type=bind,source=package-lock.json,target=package-lock.json \
-    --mount=type=cache,target=/root/.npm \
-    npm ci --omit=dev \
-    npm install log4js kafkajs\
-    npx tsc ./build/src/index-consumer.js
+ENV KAFKA_TOPIC_NAME_CONSUMER=my-topic KAFKA_PORT_1=9092 KAFKA_PORT_2=9092 KAFKA_PORT_3=9092 KAFKA_HOST_NAME=kafka KAFKA_DEAD_LETTER_QUEUE=dlq-topic
 
-# Run the application as a non-root user.
-USER node
+COPY package.json ./package.json
 
-# Copy the rest of the source files into the image.
+RUN npm install && npm install typescript -g
+
 COPY . .
 
-# Expose the port that the application listens on.
-EXPOSE 9092
-# Run the application.
-CMD ["node", "../build/src/index-consumer.js"]
+COPY script.sh /usr/bin/script.sh
+RUN tsc
+
+CMD ["node", "build/src/index-consumer.js"]

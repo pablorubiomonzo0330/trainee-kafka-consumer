@@ -15,7 +15,7 @@ const utils_1 = require("../utils");
 // To set the configuration from Kafka through environment variables
 // const kafkaConfig: KafkaConfig = { brokers: [`${process.env.KAFKA_HOST_NAME}${process.env.KAFKA_PORT}`] }
 class KafkaConfig {
-    constructor(KAFKA_BROKER_URL_1 = `${process.env.KAFKA_HOST_NAME}${process.env.KAFKA_PORT_1}`, KAFKA_BROKER_URL_2 = `${process.env.KAFKA_HOST_NAME}${process.env.KAFKA_PORT_2}`, KAFKA_BROKER_URL_3 = `${process.env.KAFKA_HOST_NAME}${process.env.KAFKA_PORT_3}`) {
+    constructor(KAFKA_BROKER_URL_1 = `${process.env.KAFKA_HOST_NAME}1:${process.env.KAFKA_PORT_1}`, KAFKA_BROKER_URL_2 = `${process.env.KAFKA_HOST_NAME}2:${process.env.KAFKA_PORT_2}`, KAFKA_BROKER_URL_3 = `${process.env.KAFKA_HOST_NAME}3:${process.env.KAFKA_PORT_3}`) {
         this.KAFKA_BROKER_URL_1 = KAFKA_BROKER_URL_1;
         this.KAFKA_BROKER_URL_2 = KAFKA_BROKER_URL_2;
         this.KAFKA_BROKER_URL_3 = KAFKA_BROKER_URL_3;
