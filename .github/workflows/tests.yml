@@ -19,7 +19,7 @@ jobs:
           docker pull rmpablo/trainee-kafka-consumer_brokers
       - name: run tests
         run: |
-          echo pwd
+          echo $(pwd)
           ls /etc/confluent/docker/
           sed -i '/KAFKA_ZOOKEEPER_CONNECT/d' /etc/confluent/docker/configure
           docker run --rm rmpablo/trainee-kafka-consumer_brokers
