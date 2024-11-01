@@ -10,9 +10,9 @@ export class KafkaConfig{
     private kafkaInstance: Kafka | undefined
 
     constructor(
-        private KAFKA_BROKER_URL_1 = `${process.env.KAFKA_HOST_NAME}1:${process.env.KAFKA_PORT_1}`,
-        private KAFKA_BROKER_URL_2 =`${process.env.KAFKA_HOST_NAME}2:${process.env.KAFKA_PORT_2}`,
-        private KAFKA_BROKER_URL_3 =`${process.env.KAFKA_HOST_NAME}3:${process.env.KAFKA_PORT_3}`
+        private KAFKA_BROKER_URL_1 = process.env.APP_ENV === 'development' ? `${process.env.KAFKA_HOST_NAME_DEVELOPMENT}${process.env.KAFKA_PORT_1}` : `${process.env.KAFKA_HOST_NAME_PRODUCTION}1:${process.env.KAFKA_PORT_1}`,
+        private KAFKA_BROKER_URL_2 =process.env.APP_ENV === 'development' ? `${process.env.KAFKA_HOST_NAME_DEVELOPMENT}${process.env.KAFKA_PORT_2}` : `${process.env.KAFKA_HOST_NAME_PRODUCTION}2:${process.env.KAFKA_PORT_2}`,
+        private KAFKA_BROKER_URL_3 =process.env.APP_ENV === 'development' ? `${process.env.KAFKA_HOST_NAME_DEVELOPMENT}${process.env.KAFKA_PORT_3}` : `${process.env.KAFKA_HOST_NAME_PRODUCTION}3:${process.env.KAFKA_PORT_3}`
     ){}
 
     public getKafkaInstance(){
@@ -24,6 +24,7 @@ export class KafkaConfig{
     }
 
     private getClientConfig(){
+        console.log(this.KAFKA_BROKER_URL_1, this.KAFKA_BROKER_URL_2, this.KAFKA_BROKER_URL_3)
         return {
             brokers: [this.KAFKA_BROKER_URL_1, this.KAFKA_BROKER_URL_2, this.KAFKA_BROKER_URL_3],
             connectionTimeout: 3000,

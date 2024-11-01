@@ -15,7 +15,7 @@ describe("ConsumerService test suite", () => {
         //Given
         const kafkaConsumerService = new kafkaConsumerService_1.KafkaConsumerService();
         const consumerConnect = jest.spyOn(kafkaConsumerService['consumer'], 'connect');
-        const consumerRun = jest.spyOn(kafkaConsumerService['consumer'], 'run').mockResolvedValue();
+        const consumerRun = jest.spyOn(kafkaConsumerService['consumer'], 'run');
         const consumerSubscribe = jest.spyOn(kafkaConsumerService['consumer'], 'subscribe');
         //when
         yield kafkaConsumerService.runConsumer();

@@ -36,46 +36,30 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.KafkaConfig = void 0;
-var kafkajs_1 = require("kafkajs");
-var utils_1 = require("../utils");
-// To set the configuration from Kafka through environment variables
-// const kafkaConfig: KafkaConfig = { brokers: [`${process.env.KAFKA_HOST_NAME}${process.env.KAFKA_PORT}`] }
-var KafkaConfig = /** @class */ (function () {
-    function KafkaConfig(KAFKA_BROKER_URL_1, KAFKA_BROKER_URL_2, KAFKA_BROKER_URL_3) {
-        if (KAFKA_BROKER_URL_1 === void 0) { KAFKA_BROKER_URL_1 = process.env.APP_ENV === 'development' ? "".concat(process.env.KAFKA_HOST_NAME_DEVELOPMENT).concat(process.env.KAFKA_PORT_1) : "".concat(process.env.KAFKA_HOST_NAME_PRODUCTION, "1:").concat(process.env.KAFKA_PORT_1); }
-        if (KAFKA_BROKER_URL_2 === void 0) { KAFKA_BROKER_URL_2 = process.env.APP_ENV === 'development' ? "".concat(process.env.KAFKA_HOST_NAME_DEVELOPMENT).concat(process.env.KAFKA_PORT_2) : "".concat(process.env.KAFKA_HOST_NAME_PRODUCTION, "2:").concat(process.env.KAFKA_PORT_2); }
-        if (KAFKA_BROKER_URL_3 === void 0) { KAFKA_BROKER_URL_3 = process.env.APP_ENV === 'development' ? "".concat(process.env.KAFKA_HOST_NAME_DEVELOPMENT).concat(process.env.KAFKA_PORT_3) : "".concat(process.env.KAFKA_HOST_NAME_PRODUCTION, "3:").concat(process.env.KAFKA_PORT_3); }
-        this.KAFKA_BROKER_URL_1 = KAFKA_BROKER_URL_1;
-        this.KAFKA_BROKER_URL_2 = KAFKA_BROKER_URL_2;
-        this.KAFKA_BROKER_URL_3 = KAFKA_BROKER_URL_3;
-    }
-    KafkaConfig.prototype.getKafkaInstance = function () {
-        if (this.kafkaInstance === undefined) {
-            var kafkaConfig = this.getClientConfig();
-            this.kafkaInstance = new kafkajs_1.Kafka(kafkaConfig);
-        }
-        return this.kafkaInstance;
-    };
-    KafkaConfig.prototype.getClientConfig = function () {
-        var _this = this;
-        console.log(this.KAFKA_BROKER_URL_1, this.KAFKA_BROKER_URL_2, this.KAFKA_BROKER_URL_3);
-        return {
-            brokers: [this.KAFKA_BROKER_URL_1, this.KAFKA_BROKER_URL_2, this.KAFKA_BROKER_URL_3],
-            connectionTimeout: 3000,
-            requestTimeout: 25000,
-            retry: {
-                retries: 8
-            },
-            restartOnFailure: function (error) { return __awaiter(_this, void 0, void 0, function () {
-                return __generator(this, function (_a) {
-                    console.log('logged error', error);
-                    utils_1.logger.error(error.message, "Date: ".concat(new Date().toISOString()));
-                    return [2 /*return*/, true];
-                });
-            }); }
-        };
-    };
-    return KafkaConfig;
-}());
-exports.KafkaConfig = KafkaConfig;
+var kafkaConsumerService_1 = require("../../src/services/kafkaConsumerService");
+describe("ConsumerService test suite", function () {
+    test("ConsumerService is connected properly", function () { return __awaiter(void 0, void 0, void 0, function () {
+        var kafkaConsumerService, consumerConnect, consumerRun, consumerSubscribe;
+        return __generator(this, function (_a) {
+            switch (_a.label) {
+                case 0:
+                    kafkaConsumerService = new kafkaConsumerService_1.KafkaConsumerService();
+                    consumerConnect = jest.spyOn(kafkaConsumerService['consumer'], 'connect');
+                    consumerRun = jest.spyOn(kafkaConsumerService['consumer'], 'run');
+                    consumerSubscribe = jest.spyOn(kafkaConsumerService['consumer'], 'subscribe');
+                    //when
+                    return [4 /*yield*/, kafkaConsumerService.runConsumer()
+                        //then
+                    ];
+                case 1:
+                    //when
+                    _a.sent();
+                    //then
+                    expect(consumerRun).toHaveBeenCalled();
+                    expect(consumerConnect).toHaveBeenCalled();
+                    expect(consumerSubscribe).toHaveBeenCalled();
+                    return [2 /*return*/];
+            }
+        });
+    }); });
+});

@@ -36,50 +36,32 @@ var __generator = (this && this.__generator) || function (thisArg, body) {
     }
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.KafkaConsumerService = void 0;
-var validator_1 = require("../messaging/validator");
-var shipment_loss_event_schema_json_1 = require("../specification/shipment-loss-event-schema.json");
+exports.DeadLetterQueue = void 0;
 var kafka_config_1 = require("../appconfig/kafka-config");
-var utils_1 = require("../utils");
-var utils_2 = require("../utils");
-var KafkaConsumerService = /** @class */ (function () {
-    function KafkaConsumerService() {
+var DeadLetterQueue = /** @class */ (function () {
+    function DeadLetterQueue() {
         this.kafka = new kafka_config_1.KafkaConfig().getKafkaInstance();
-        this.consumer = this.kafka.consumer({ groupId: 'my-group' });
+        this.producer = this.kafka.producer();
     }
-    KafkaConsumerService.prototype.runConsumer = function () {
+    DeadLetterQueue.prototype.runProducer = function (message) {
         return __awaiter(this, void 0, void 0, function () {
-            var _this = this;
             return __generator(this, function (_a) {
                 switch (_a.label) {
-                    case 0: return [4 /*yield*/, this.consumer.connect()];
+                    case 0:
+                        console.log("about to connect");
+                        return [4 /*yield*/, this.producer.connect()];
                     case 1:
                         _a.sent();
-                        return [4 /*yield*/, this.consumer.subscribe({ topic: process.env.KAFKA_TOPIC_NAME_CONSUMER, fromBeginning: true })];
+                        console.log("connected");
+                        return [4 /*yield*/, this.producer.send({
+                                topic: process.env.KAFKA_DEAD_LETTER_QUEUE,
+                                messages: [{
+                                        value: JSON.stringify(message)
+                                    }]
+                            })];
                     case 2:
                         _a.sent();
-                        console.log('subscribed to topic: ', process.env.KAFKA_TOPIC_NAME_CONSUMER);
-                        return [4 /*yield*/, this.consumer.run({
-                                eachMessage: function (_a) { return __awaiter(_this, [_a], void 0, function (_b) {
-                                    var payloadEvent, shipmentLossEventObject;
-                                    var topic = _b.topic, partition = _b.partition, message = _b.message;
-                                    return __generator(this, function (_c) {
-                                        switch (_c.label) {
-                                            case 0:
-                                                if (message.value === null) {
-                                                    utils_2.logger.error("The message value is empty - Date: ".concat(new Date().toISOString()));
-                                                    return [2 /*return*/];
-                                                }
-                                                payloadEvent = validator_1.Validator.parseJson(message.value.toString());
-                                                return [4 /*yield*/, validator_1.Validator.validateShipmentLossEvent(payloadEvent, shipment_loss_event_schema_json_1.default)];
-                                            case 1:
-                                                _c.sent();
-                                                shipmentLossEventObject = (0, utils_1.mapPayloadIntoShipmentLossEventModel)(payloadEvent);
-                                                return [2 /*return*/];
-                                        }
-                                    });
-                                }); }
-                            })];
+                        return [4 /*yield*/, this.producer.disconnect()];
                     case 3:
                         _a.sent();
                         return [2 /*return*/];
@@ -87,6 +69,6 @@ var KafkaConsumerService = /** @class */ (function () {
             });
         });
     };
-    return KafkaConsumerService;
+    return DeadLetterQueue;
 }());
-exports.KafkaConsumerService = KafkaConsumerService;
+exports.DeadLetterQueue = DeadLetterQueue;
