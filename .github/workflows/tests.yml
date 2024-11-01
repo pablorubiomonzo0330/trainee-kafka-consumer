@@ -19,5 +19,7 @@ jobs:
           docker pull rmpablo/trainee-kafka-consumer_brokers
       - name: run tests
         run: |
+          echo $(pwd)
+          docker-compose up
           docker run --rm rmpablo/trainee-kafka-consumer_brokers
           npm test
