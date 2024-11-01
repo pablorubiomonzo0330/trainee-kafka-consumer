@@ -19,5 +19,5 @@ jobs:
           docker pull rmpablo/trainee-kafka-consumer_brokers
       - name: run tests
         run: |
-          docker run --rm rmpablo/trainee-kafka-consumer_brokers
+          docker run --rm rmpablo/trainee-kafka-consumer_brokers -e KAFKA_ZOOKEEPER_CONNECT: zookeeper:2181
           npm test
