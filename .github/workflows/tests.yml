@@ -14,7 +14,9 @@ jobs:
 
       - name: pull pre-built image from docker
         run: |
+          docker login -u rmpablo -p ${{secrets.DOCKER_SECRET}}
           docker pull rmpablo/trainee-kafka-consumer_brokers
       - name: run tests
         run: |
-          docker run --rm myusername/my_image:latest npm test
+          docker run --rm rmpablo/trainee-kafka-consumer_brokers
+          npm test
