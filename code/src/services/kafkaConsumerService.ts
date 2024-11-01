@@ -18,7 +18,6 @@ export class KafkaConsumerService {
     public async runConsumer(){
         await this.consumer.connect()
         await this.consumer.subscribe({topic: process.env.KAFKA_TOPIC_NAME_CONSUMER as string, fromBeginning: true})
-        console.log('subscribed to topic: ', process.env.KAFKA_TOPIC_NAME_CONSUMER as string)
         await this.consumer.run({
             eachMessage: async ({topic, partition, message}) => {
                 if (message.value === null) {
