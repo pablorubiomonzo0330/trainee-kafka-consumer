@@ -1,18 +1,9 @@
 version: 2
 updates:
   - package-ecosystem: "npm"
-    directory: "/" # Adjust this if your package.json is in a subdirectory
+    directory: "../"
     schedule:
-      interval: "weekly" # You can change this to "daily", "monthly", etc.
+      interval: "weekly"
     commit-message:
-      prefix: "fix" # You can change this to "chore", "feat", etc.
+      prefix: "fix"
     open-pull-requests-limit: 5
-    ignore:
-      - dependency-name: "jsonschema"
-        versions: ["<1.4.1"] # Specify any versions to ignore if necessary
-      - dependency-name: "kafkajs"
-        versions: ["<2.2.4"]
-      - dependency-name: "log4js"
-        versions: ["<6.9.1"]
-      - dependency-name: "yaml"
-        versions: ["<2.6.0"]
