@@ -10,7 +10,6 @@ RUN npm install && npm install typescript -g
 
 COPY . .
 
-COPY script.sh /usr/bin/script.sh
 RUN tsc
 
 CMD ["node", "build/src/index-consumer.js"]
