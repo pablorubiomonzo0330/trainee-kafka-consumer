@@ -1,0 +1,14 @@
+name: Build and Publish image to docker Hub
+on: [push]
+jobs:
+  publish_images:
+    runs-on: ubuntu-latest
+    steps:
+      - name: checkout
+        uses: actions/checkout@v4
+      - name: build image
+        run: docker build . -t rmpablo/consumer-kafka-ghactions-docker:latest
+      - name: push image to docker hub
+        run: |
+          docker login -u rmpablo -p ${{secrets.DOCKER_SECRET}}
+          docker push rmpablo/consumer-kafka-ghactions-docker:latest
