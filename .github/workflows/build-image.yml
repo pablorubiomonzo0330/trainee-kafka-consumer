@@ -1,5 +1,10 @@
 name: Build and Publish image to docker Hub
-on: [push]
+on:
+  push:
+    branches:
+      - main
+    paths:
+      - 'Dockerfile'
 jobs:
   publish_images:
     runs-on: ubuntu-latest
